@@ -1,0 +1,60 @@
+     A*%%TS  SD  19980717  133629  QSECOFR     REL-V4R2M0  5769-PW1
+     A*****************************************************************
+     A*                                                               *
+     A*  SYSTEM NAME..: CCL400                                        *
+     A*                                                               *
+     A*  FILE NAME....: CCL107D                                       *
+     A*                                                               *
+     A*  FILE DESC....: DISPLAY DEPENDENCIES                          *
+     A*                                                               *
+     A*  DATE.........: 17/07/98                                      *
+     A*                                                               *
+     A*  AUTHOR.......: FRED MITCHELL                                 *
+     A*                                                               *
+     A*             (C) COPYRIGHT CONCISE CONSULTING LTD.             *
+     A*****************************************************************
+     A*%%EC
+     A                                      DSPSIZ(24 80 *DS3)
+     A                                      PRINT(10)
+     A                                      CF03
+     A                                      CF12
+     A          R F01SFL                    SFL
+     A*%%TS  SD  19980717  133629  QSECOFR     REL-V4R2M0  5769-PW1
+     A            SELECT         1A  I  8  5CHECK(AB)
+     A                                      VALUES('1')
+     A            WHRELI        10A  O  8 13
+     A            WHREFI        10A  O  8 26
+     A          R F01CTL                    SFLCTL(F01SFL)
+     A*%%TS  SD  19980717  133629  QSECOFR     REL-V4R2M0  5769-PW1
+     A                                      SFLSIZ(0014)
+     A                                      SFLPAG(0013)
+     A                                      OVERLAY
+     A N97                                  SFLDSP
+     A N97                                  SFLDSPCTL
+     A  97                                  SFLCLR
+     A N97                                  SFLEND(*MORE)
+     A                                  1  2'DSPDEP'
+     A                                  1 21'Display File Dependencies'
+     A                                      DSPATR(HI)
+     A                                  1 56'User'
+     A            USERID        10A  O  1 61
+     A            UDATE          6Y 0O  1 72EDTCDE(Y)
+     A                                  2 72TIME
+     A                                  3  2'File Name....:'
+     A            FILE          21A  O  3 17
+     A                                  4  2'Description..:'
+     A            TEXT          50A  O  4 17
+     A                                  6  5'1'
+     A                                      DSPATR(UL)
+     A                                  6 13'Library'
+     A                                      DSPATR(UL)
+     A                                  6 26'File'
+     A                                      DSPATR(UL)
+     A          R F01TRL
+     A*%%TS  SD  19980717  133629  QSECOFR     REL-V4R2M0  5769-PW1
+     A                                 22  2'                                  -
+     A                                                                         -
+     A                                               '
+     A                                      DSPATR(UL)
+     A                                 23  2'F3=Exit'
+     A                                 23 11'F12=Previous'

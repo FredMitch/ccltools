@@ -1,0 +1,294 @@
+     A*****************************************************************
+     A*                                                               *
+     A*  SYSTEM NAME..: CCL400                                        *
+     A*                                                               *
+     A*  FILE NAME....: CCL114D                                       *
+     A*                                                               *
+     A*  FILE DESC....: WORK WITH THE *LDA                            *
+     A*                                                               *
+     A*  DATE.........: 17/07/98                                      *
+     A*                                                               *
+     A*  AUTHOR.......: FRED MITCHELL                                 *
+     A*                                                               *
+     A*             (C) COPYRIGHT CONCISE CONSULTING LTD.             *
+     A*****************************************************************
+     A                                      DSPSIZ(24 80 *DS3)
+     A                                      CHGINPDFT(HI CS)
+     A                                      MSGLOC(24)
+     A                                      PRINT
+     A          R F01
+     A                                      CF03
+     A                                      CF08
+     A                                      CF11
+     A                                  1  2'WRKLDA'
+     A                                  1 15'Work with *LDA'
+     A                                      DSPATR(HI)
+     A                                  1 56'User'
+     A            USERID        10A  O  1 61
+     A            UDATE          6Y 0O  1 72EDTCDE(Y)
+     A                                  2  2'Application  . . . . . .L#APSR:'
+     A            L#APSR         1   B  2 34
+     A                                  2 37'code..L#APPN'
+     A            L#APPN         2   B  2 50
+     A                                  2 53'release..L#RLSL'
+     A            L#RLSL         2   B  2 69
+     A                                  2 72TIME
+     A                                  3  2'Company Code . . . . . .L#CONO:'
+     A            L#CONO         2   B  3 34
+     A                                  4  2'Company Name . . . . . .L#CONM:'
+     A            L#CONM        35   B  4 34
+     A                                  5  2'Interface companies. . .L#GLCO:'
+     A            L#GLCO         2   B  5 34
+     A                                  5 41'L#PRCO:'
+     A            L#PRCO         2   B  5 49
+     A                                  5 55'L#XXCO:'
+     A            L#XXCO         2   B  5 63
+     A                                  6  2'Application User . . . .L#USER:'
+     A            L#USER        10   B  6 34
+     A                                  6 49'Multi-currency.L#MCUR:'
+     A            L#MCUR         1   B  6 72
+     A                                  7  2'Terminal I-D . . . . . .L#TERM:'
+     A            L#TERM        10   B  7 34
+     A                                  8  2'Exclusivity requirement.L#EXCL:'
+     A            L#EXCL         1   B  8 34
+     A                                  9  2'Job Number . . . . . . .L#JBNO:'
+     A            L#JBNO         9   B  9 34
+     A                                 10  2'Job no. of last SBMJOB .L#CPFN:'
+     A            L#CPFN         6   B 10 34
+     A                                 10 47'Sbm.prompt . . L#SBMX:'
+     A            L#SBMX         1   B 10 70
+     A                                 11  2'Program I-D  . . . . . .L#PGID:'
+     A            L#PGID        10   B 11 34
+     A                                 11 47'Help Code  . . L#HPCD:'
+     A            L#HPCD         2   B 11 70
+     A                                 12  2'Job Name . . . . . . . .L#JOBN:'
+     A            L#JOBN        10   B 12 34
+     A                                 13  2'Function Code  . . . . .L#FUNC:'
+     A            L#FUNC         4   B 13 34
+     A                                 13 43'Menu  . . . . .L#MENU:'
+     A            L#MENU        10   B 13 66
+     A                                 14  2'Return code  . . . . . .L#RTCD:'
+     A            L#RTCD         2   B 14 34
+     A                                 14 43'Language  . . .L#LANG:'
+     A            L#LANG         2   B 14 66
+     A                                 15  2'Library List Code  . . .L#LIBL:'
+     A            L#LIBL         4   B 15 34
+     A                                 15 43'Internal date .L#IDAT:'
+     A            L#IDAT         7   B 15 66
+     A                                 16  2'Environment code . . . .L#CUSC:'
+     A            L#CUSC         3   B 16 34
+     A                                 16 43'External date .L#EDAT:'
+     A            L#EDAT         6   B 16 66
+     A                                 17  2'Restricted access.(Y/N).L#RSTA:'
+     A            L#RSTA         1   B 17 34
+     A                                 17 43'Date format . .L#DTFM:'
+     A            L#DTFM         1   B 17 66
+     A                                 18  2'Sign-off after request .L#SOFF:'
+     A            L#SOFF         1   B 18 34
+     A                                 18 43'Maintain co . .L#MNCO:'
+     A            L#MNCO         1   B 18 66
+     A                                 19  2'Job Queue  . . . . . . .L#JOBQ:'
+     A            L#JOBQ        10   B 19 34
+     A                                 19 47'Library . .L#JOBL:'
+     A            L#JOBL        10   B 19 66
+     A                                 20  2'Output print queue . . .L#PRQU:'
+     A            L#PRQU        10   B 20 34
+     A                                 20 47'Library . .L#PLIB:'
+     A            L#PLIB        10   B 20 66
+     A                                 21  2'Output Queue Hold  . . .L#HOLD:'
+     A            L#HOLD         1   B 21 34
+     A                                 21 47'No. apps. .L#APPS:'
+     A            L#NAPS         1   B 21 66
+     A                                 22  2'                                  -
+     A                                                                         -
+     A                                               '
+     A                                      DSPATR(UL)
+     A                                 23  2'F3=Exit'
+     A                                 23 11'F8=Update'
+     A                                 23 22'F11=Normal view'
+     A          R F01A
+     A                                      CF03
+     A                                      CF08
+     A                                      CF11
+     A                                  1  2'WRKLDA'
+     A                                  1 15'Work with *LDA - Positions 1 to 25-
+     A                                      6'
+     A                                      DSPATR(HI)
+     A                                  1 56'User'
+     A            USERID        10A  O  1 61
+     A            UDATE          6Y 0O  1 72EDTCDE(Y)
+     A                                  2 72TIME
+     A                                  3 13'  1       10        20        30  -
+     A                                            40        50'
+     A                                  4 15'|........|.........|.........|....-
+     A                                      .....|.........|'
+     A            L#NRM1        50A  B  5 15
+     A                                  6 13' 51       60        70        80  -
+     A                                            90       100'
+     A                                  7 15'|........|.........|.........|....-
+     A                                      .....|.........|'
+     A            L#NRM2        50A  B  8 15
+     A                                  9 13'101      110       120       130  -
+     A                                           140       150'
+     A                                 10 15'|........|.........|.........|....-
+     A                                      .....|.........|'
+     A            L#NRM3        50A  B 11 15
+     A                                 12 13'151      160       170       180  -
+     A                                           190       200'
+     A                                 13 15'|........|.........|.........|....-
+     A                                      .....|.........|'
+     A            L#NRM4        50A  B 14 15
+     A                                 15 13'201      210       220       230  -
+     A                                           240       250'
+     A                                 16 15'|........|.........|.........|....-
+     A                                      .....|.........|'
+     A            L#NRM5        50A  B 17 15
+     A                                 18 13'251  256'
+     A                                 19 15'|....|'
+     A            L#NRM6         6A  B 20 15
+     A                                 22  2'                                  -
+     A                                                                         -
+     A                                               '
+     A                                      DSPATR(UL)
+     A                                 23  2'F3=Exit'
+     A                                 23 11'F8=Update'
+     A                                 23 22'F11=JBA view'
+     A          R F02
+     A                                      CF03
+     A                                      CF08
+     A                                      CF12
+     A                                  1  2'WRKLDA'
+     A                                  1 15'Work with *LDA - Positions 257 to -
+     A                                      512'
+     A                                      DSPATR(HI)
+     A                                  1 56'User'
+     A            USERID        10A  O  1 61
+     A            UDATE          6Y 0O  1 72EDTCDE(Y)
+     A                                  2 72TIME
+     A                                  3 19'257          270       280       2-
+     A                                      90       300'
+     A                                  4 21'|..|.........|.........|.........|-
+     A                                      .........|'
+     A            L#WK11        44A  B  5 21
+     A                                  6 13'301      310       320       330  -
+     A                                           340       350'
+     A                                  7 15'|........|.........|.........|....-
+     A                                      .....|.........|'
+     A            L#WK12        50A  B  8 15
+     A                                  9 13'351      360       370       380  -
+     A                                           390       400'
+     A                                 10 15'|........|.........|.........|....-
+     A                                      .....|.........|'
+     A            L#WK13        50A  B 11 15
+     A                                 12 13'401      410       420       430  -
+     A                                           440       450'
+     A                                 13 15'|........|.........|.........|....-
+     A                                      .....|.........|'
+     A            L#WK14        50A  B 14 15
+     A                                 15 13'451      460       470       480  -
+     A                                           490       500'
+     A                                 16 15'|........|.........|.........|....-
+     A                                      .....|.........|'
+     A            L#WK15        50A  B 17 15
+     A                                 18 13'501        512'
+     A                                 19 15'|..........|'
+     A            L#WK16        12A  B 20 15
+     A                                 22  2'                                  -
+     A                                                                         -
+     A                                               '
+     A                                      DSPATR(UL)
+     A                                 23  2'F3=Exit'
+     A                                 23 11'F8=Update'
+     A                                 23 22'F12=Previous'
+     A          R F03
+     A                                      CF03
+     A                                      CF08
+     A                                      CF12
+     A                                  1  2'WRKLDA'
+     A                                  1 15'Work with *LDA - Positions 513 to -
+     A                                      768'
+     A                                      DSPATR(HI)
+     A                                  1 56'User'
+     A            USERID        10A  O  1 61
+     A            UDATE          6Y 0O  1 72EDTCDE(Y)
+     A                                  2 72TIME
+     A                                  3 25'513    520       530       540    -
+     A                                         550'
+     A                                  4 27'.......|.........|.........|......-
+     A                                      ...|'
+     A            L#WK21        38A  B  5 27
+     A                                  6 13'551      560       570       580  -
+     A                                           590       600'
+     A                                  7 13'  |........|.........|.........|..-
+     A                                      .......|.........|'
+     A            L#WK22        50A  B  8 15
+     A                                  9 13'601      610       620       630  -
+     A                                           640       650'
+     A                                 10 13'  |........|.........|.........|..-
+     A                                      .......|.........|'
+     A            L#WK23        50A  B 11 15
+     A                                 12 13'651      660       670       680  -
+     A                                           690       700'
+     A                                 13 13'  |........|.........|.........|..-
+     A                                      .......|.........|'
+     A            L#WK24        50A  B 14 15
+     A                                 15 13'701      710       720       730  -
+     A                                           740       750'
+     A                                 16 13'  |........|.........|.........|..-
+     A                                      .......|.........|'
+     A            L#WK25        50A  B 17 15
+     A                                 18 13'751      760     768'
+     A                                 19 13'  |........|.......|'
+     A            L#WK26        18A  B 20 15
+     A                                 22  2'                                  -
+     A                                                                         -
+     A                                               '
+     A                                      DSPATR(UL)
+     A                                 23  2'F3=Exit'
+     A                                 23 11'F8=Update'
+     A                                 23 22'F12=Previous'
+     A          R F04
+     A                                      CF03
+     A                                      CF08
+     A                                      CF12
+     A                                  1  2'WRKLDA'
+     A                                  1 15'Work with *LDA - Positions 769 to -
+     A                                      1024'
+     A                                      DSPATR(HI)
+     A                                  1 56'User'
+     A            USERID        10A  O  1 61
+     A            UDATE          6Y 0O  1 72EDTCDE(Y)
+     A                                  2 72TIME
+     A                                  3 31'769        780       790       800'
+     A                                  4 31'  .|.........|.........|.........|'
+     A            L#AST1        32A  B  5 33
+     A                                  6 13'801      810       820       830  -
+     A                                           840       850'
+     A                                  7 13'  |........|.........|.........|..-
+     A                                      .......|.........|'
+     A            L#AST2        50A  B  8 15
+     A                                  9 13'851      860       870       880  -
+     A                                           890       900'
+     A                                 10 13'  |........|.........|.........|..-
+     A                                      .......|.........|'
+     A            L#AST3        50A  B 11 15
+     A                                 12 13'901      910       920       930  -
+     A                                           940       950'
+     A                                 13 13'  |........|.........|.........|..-
+     A                                      .......|.........|'
+     A            L#AST4        50A  B 14 15
+     A                                 15 13'951      960       970       980  -
+     A                                           990      1000'
+     A                                 16 13'  |........|.........|.........|..-
+     A                                      .......|.........|'
+     A            L#AST5        50A  B 17 15
+     A                                 18 12'1001     1010          1024'
+     A                                 19 12'   |........|.........|...|'
+     A            L#AST6        24A  B 20 15
+     A                                 22  2'                                  -
+     A                                                                         -
+     A                                               '
+     A                                      DSPATR(UL)
+     A                                 23  2'F3=Exit'
+     A                                 23 11'F8=Update'
+     A                                 23 22'F12=Previous'

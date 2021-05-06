@@ -1,0 +1,181 @@
+/*********************************************************************/
+/*                                                                   */
+/*  System Name..: CCL400                                            */
+/*                                                                   */
+/*  Program Name.: CCLCRTPGM                                         */
+/*                                                                   */
+/*  Program Desc.: Create CCL400 Programs                            */
+/*                                                                   */
+/*  Date.........: 30th March 2005                                   */
+/*                                                                   */
+/*  Author.......: Fred Mitchell                                     */
+/*                                                                   */
+/*               (C) Copyright Concise Consulting Ltd.               */
+/*********************************************************************/
+             PGM
+/*                                                                   */
+/* Declarations                                                      */
+             DCL        VAR(&SRCLIB) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&SRCFIL) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&OBJLIB) TYPE(*CHAR) LEN(10)
+             DCL        VAR(&TGTRLS) TYPE(*CHAR) LEN(10)
+/*                                                                   */
+/* Global message monitor                                            */
+             MONMSG     MSGID(CPF0000) EXEC(GOTO CMDLBL(ABNORMAL))
+/*                                                                   */
+/* Set up defaults                                                   */
+             CHGVAR     VAR(&SRCLIB) VALUE('CCLTOOLS')
+             CHGVAR     VAR(&SRCFIL) VALUE('CCLTOOLSRC')
+             CHGVAR     VAR(&OBJLIB) VALUE('CCLTOOLS')
+             CHGVAR     VAR(&TGTRLS) VALUE('*CURRENT')
+/*                                                                   */
+/* Create/change printer file                                        */
+             CRTPRTF    FILE(&OBJLIB/QPRINTA4) TEXT('A4 Printer +
+                          File') PAGESIZE(70 80) PAGRTT(0) +
+                          FORMTYPE(A4) MAXRCDS(*NOMAX) HOLD(*NO) +
+                          AUT(*USE)
+             MONMSG     MSGID(CPF0000) EXEC(DO)
+             CHGPRTF    FILE(&OBJLIB/QPRINTA4) PAGESIZE(70 80) +
+                          TEXT('A4 Printer File') PAGRTT(0) +
+                          FORMTYPE(A4) MAXRCDS(*NOMAX) HOLD(*NO)
+             ENDDO
+/*                                                                   */
+/* Create temporary files                                            */
+             DSPFFD     FILE(QGPL/QORDFILE) OUTPUT(*OUTFILE) +
+                          OUTFILE(&OBJLIB/CCL101W)
+             DSPOBJD    OBJ(&OBJLIB/*ALL) OBJTYPE(*FILE) +
+                          OUTPUT(*OUTFILE) OUTFILE(&OBJLIB/CCL103W)
+             DSPDBR     FILE(QGPL/QORDFILE) OUTPUT(*OUTFILE) +
+                          OUTFILE(&OBJLIB/CCL106W)
+             DSPFD      FILE(QGPL/QORDFILE) TYPE(*ACCPTH) OUTPUT(*OUTFILE) +
+                          OUTFILE(&OBJLIB/CCL109W)
+             DSPFD      FILE(QGPL/QORDFILE) TYPE(*SELECT) OUTPUT(*OUTFILE) +
+                          OUTFILE(&SRCLIB/CCL109X)
+/*                                                                   */
+/* DSPFLD                                                            */
+ DSPFLD:     DLTCMD     CMD(&OBJLIB/DSPFLD)
+             MONMSG     MSGID(CPF0000)
+             DLTPGM     PGM(&OBJLIB/CCL101)
+             MONMSG     MSGID(CPF0000)
+             DLTPGM     PGM(&OBJLIB/CCL102)
+             MONMSG     MSGID(CPF0000)
+             DLTF       FILE(&OBJLIB/CCL102D)
+             MONMSG     MSGID(CPF0000)
+
+             CRTBNDCL   PGM(&OBJLIB/CCL101) SRCFILE(&SRCLIB/&SRCFIL) +
+                          DFTACTGRP(*NO) ACTGRP(CCL400) USRPRF(*OWNER) +
+                          TGTRLS(&TGTRLS) AUT(*USE)
+             CRTDSPF    FILE(&OBJLIB/CCL102D) SRCFILE(&SRCLIB/&SRCFIL) +
+                          RSTDSP(*YES) AUT(*USE)
+             CRTBNDRPG  PGM(&OBJLIB/CCL102) SRCFILE(&SRCLIB/&SRCFIL) +
+                          DFTACTGRP(*NO) ACTGRP(CCL400) USRPRF(*OWNER) +
+                          AUT(*USE) TGTRLS(&TGTRLS)
+             CRTCMD     CMD(&OBJLIB/DSPFLD) PGM(&OBJLIB/CCL101) +
+                          SRCFILE(&SRCLIB/&SRCFIL) PRDLIB(&OBJLIB)
+/*                                                                   */
+/* PRTFLD                                                            */
+ PRTFLD:     DLTCMD     CMD(&OBJLIB/PRTFLD)
+             MONMSG     MSGID(CPF0000)
+             DLTPGM     PGM(&OBJLIB/CCL103)
+             MONMSG     MSGID(CPF0000)
+             DLTPGM     PGM(&OBJLIB/CCL104)
+             MONMSG     MSGID(CPF0000)
+
+             CRTBNDCL   PGM(&OBJLIB/CCL103) SRCFILE(&SRCLIB/&SRCFIL) +
+                          DFTACTGRP(*NO) ACTGRP(CCL400) USRPRF(*OWNER) +
+                          TGTRLS(&TGTRLS) AUT(*USE)
+             CRTBNDRPG  PGM(&OBJLIB/CCL104) SRCFILE(&SRCLIB/&SRCFIL) +
+                          DFTACTGRP(*NO) ACTGRP(CCL400) USRPRF(*OWNER) +
+                          AUT(*USE) TGTRLS(&TGTRLS)
+             CRTCMD     CMD(&OBJLIB/PRTFLD) PGM(&OBJLIB/CCL103) +
+                          SRCFILE(&SRCLIB/&SRCFIL) PRDLIB(&OBJLIB)
+/*                                                                   */
+/* DSPDEP                                                            */
+ DSPDEP:     DLTCMD     CMD(&OBJLIB/DSPDEP)
+             MONMSG     MSGID(CPF0000)
+             DLTPGM     PGM(&OBJLIB/CCL105)
+             MONMSG     MSGID(CPF0000)
+             DLTPGM     PGM(&OBJLIB/CCL106)
+             MONMSG     MSGID(CPF0000)
+             DLTPGM     PGM(&OBJLIB/CCL107)
+             MONMSG     MSGID(CPF0000)
+             DLTF       FILE(&OBJLIB/CCL107D)
+             MONMSG     MSGID(CPF0000)
+
+             CRTBNDCL   PGM(&OBJLIB/CCL105) SRCFILE(&SRCLIB/&SRCFIL) +
+                          DFTACTGRP(*NO) ACTGRP(CCL400) USRPRF(*OWNER) +
+                          TGTRLS(&TGTRLS) AUT(*USE)
+             CRTBNDCL   PGM(&OBJLIB/CCL106) SRCFILE(&SRCLIB/&SRCFIL) +
+                          DFTACTGRP(*NO) ACTGRP(CCL400) USRPRF(*OWNER) +
+                          TGTRLS(&TGTRLS) AUT(*USE)
+             CRTDSPF    FILE(&OBJLIB/CCL107D) SRCFILE(&SRCLIB/&SRCFIL) +
+                          RSTDSP(*YES) AUT(*USE)
+             CRTBNDRPG  PGM(&OBJLIB/CCL107) SRCFILE(&SRCLIB/&SRCFIL) +
+                          DFTACTGRP(*NO) ACTGRP(CCL400) USRPRF(*OWNER) +
+                          AUT(*USE) TGTRLS(&TGTRLS)
+             CRTCMD     CMD(&OBJLIB/DSPDEP) PGM(&OBJLIB/CCL105) +
+                          SRCFILE(&SRCLIB/&SRCFIL) PRDLIB(&OBJLIB)
+/*                                                                   */
+/* DSPKEY                                                            */
+ DSPKEY:     DLTCMD     CMD(&OBJLIB/DSPKEY)
+             MONMSG     MSGID(CPF0000)
+             DLTPGM     PGM(&OBJLIB/CCL108)
+             MONMSG     MSGID(CPF0000)
+             DLTPGM     PGM(&OBJLIB/CCL109)
+             MONMSG     MSGID(CPF0000)
+             DLTPGM     PGM(&OBJLIB/CCL110)
+             MONMSG     MSGID(CPF0000)
+             DLTF       FILE(&OBJLIB/CCL110D)
+             MONMSG     MSGID(CPF0000)
+
+             CRTBNDCL   PGM(&OBJLIB/CCL108) SRCFILE(&SRCLIB/&SRCFIL) +
+                          DFTACTGRP(*NO) ACTGRP(CCL400) USRPRF(*OWNER) +
+                          TGTRLS(&TGTRLS) AUT(*USE)
+             CRTBNDCL   PGM(&OBJLIB/CCL109) SRCFILE(&SRCLIB/&SRCFIL) +
+                          DFTACTGRP(*NO) ACTGRP(CCL400) USRPRF(*OWNER) +
+                          TGTRLS(&TGTRLS) AUT(*USE)
+             CRTDSPF    FILE(&OBJLIB/CCL110D) SRCFILE(&SRCLIB/&SRCFIL) +
+                          RSTDSP(*YES) AUT(*USE)
+             CRTBNDRPG  PGM(&OBJLIB/CCL110) SRCFILE(&SRCLIB/&SRCFIL) +
+                          DFTACTGRP(*NO) ACTGRP(CCL400) USRPRF(*OWNER) +
+                          AUT(*USE) TGTRLS(&TGTRLS)
+             CRTCMD     CMD(&OBJLIB/DSPKEY) PGM(&OBJLIB/CCL108) +
+                          SRCFILE(&SRCLIB/&SRCFIL) PRDLIB(&OBJLIB)
+/*                                                                   */
+/* WRKLDA                                                            */
+ WRKLDA:     DLTCMD     CMD(&OBJLIB/WRKLDA)
+             MONMSG     MSGID(CPF0000)
+             DLTPGM     PGM(&OBJLIB/CCL114)
+             MONMSG     MSGID(CPF0000)
+             DLTF       FILE(&OBJLIB/CCL114D)
+             MONMSG     MSGID(CPF0000)
+
+             CRTDSPF    FILE(&OBJLIB/CCL114D) SRCFILE(&SRCLIB/&SRCFIL) +
+                          RSTDSP(*YES) AUT(*USE)
+             CRTBNDRPG  PGM(&OBJLIB/CCL114) SRCFILE(&SRCLIB/&SRCFIL) +
+                          DFTACTGRP(*NO) ACTGRP(CCL400) USRPRF(*OWNER) +
+                          AUT(*USE) TGTRLS(&TGTRLS)
+             CRTCMD     CMD(&OBJLIB/WRKLDA) PGM(&OBJLIB/CCL114) +
+                          SRCFILE(&SRCLIB/&SRCFIL) PRDLIB(&OBJLIB)
+/*                                                                   */
+/* Delete temporary files                                            */
+             DLTF       FILE(&SRCLIB/CCL101W)
+             DLTF       FILE(&SRCLIB/CCL103W)
+             DLTF       FILE(&SRCLIB/CCL106W)
+             DLTF       FILE(&SRCLIB/CCL109W)
+             DLTF       FILE(&SRCLIB/CCL109X)
+/*                                                                   */
+/* Send completion message                                           */
+             SNDPGMMSG  MSGID(CPF9898) MSGF(QSYS/QCPFMSG) +
+                          MSGDTA('CCLCRTTOOL has completed OK') +
+                          TOPGMQ(*EXT)
+/*                                                                   */
+/* Normal end of program                                             */
+             RETURN
+/*                                                                   */
+/* Abnormal end of program                                           */
+ ABNORMAL:   DMPCLPGM
+             SNDPGMMSG  MSGID(CPF9898) MSGF(QSYS/QCPFMSG) +
+                          MSGDTA('CCLCRTTOOL did not complete +
+                          normally') TOPGMQ(*EXT)
+             ENDPGM

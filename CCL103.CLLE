@@ -1,0 +1,96 @@
+/*********************************************************************/
+/*                                                                   */
+/*  SYSTEM NAME..: CCL400                                            */
+/*                                                                   */
+/*  PROGRAM NAME.: CCL103                                            */
+/*                                                                   */
+/*  PROGRAM DESC.: PRINT FIELD DESCRIPTIONS (CPP FOR PRTFLD)         */
+/*                                                                   */
+/*  DATE.........: 17/07/98                                          */
+/*                                                                   */
+/*  AUTHOR.......: FRED MITCHELL                                     */
+/*                                                                   */
+/*               (C) COPYRIGHT CONCISE CONSULTING LTD.               */
+/*********************************************************************/
+             PGM        PARM(&FILEFULL)
+/*                                                                   */
+/* DECLARATIONS                                                      */
+             DCL        &FILEFULL *CHAR LEN(20)
+             DCL        &FILE *CHAR LEN(10)
+             DCL        &LIB *CHAR LEN(10)
+             DCL        &TEXT *CHAR LEN(50)
+             DCL        VAR(&MSGID) TYPE(*CHAR) LEN(7)
+             DCL        VAR(&MSGDTA) TYPE(*CHAR) LEN(256)
+             DCLF       FILE(CCL103W)
+/*                                                                   */
+/* Global message monitor                                            */
+             MONMSG     MSGID(CPF0000 MCH0000) EXEC(GOTO CMDLBL(ERROR))
+/*                                                                   */
+/* EXTRACT FILE/LIBRARY NAMES                                        */
+             CHGVAR     &FILE %SST(&FILEFULL 1 10) /* File name */
+             CHGVAR     &LIB %SST(&FILEFULL 11 10) /* Library name */
+/*                                                                   */
+/* IF FILE SELECTED                                                  */
+             IF         COND(&FILE *NE '*ALL') THEN(DO)
+/*                                                                   */
+             CHKOBJ     OBJ(&LIB/&FILE) OBJTYPE(*FILE)
+/*                                                                   */
+             RTVOBJD    OBJ(&LIB/&FILE) OBJTYPE(*FILE) TEXT(&TEXT)
+/*                                                                   */
+             DSPFFD     FILE(&LIB/&FILE) OUTPUT(*OUTFILE) +
+                          OUTFILE(QTEMP/CCL101W)
+/*                                                                   */
+             OVRDBF     FILE(CCL101W) TOFILE(QTEMP/CCL101W)
+             CALL       PGM(CCL104) PARM(&TEXT)
+/*                                                                   */
+             GOTO       CMDLBL(END)
+/*                                                                   */
+             ENDDO
+/*                                                                   */
+/* IF '*ALL' SELECTED AS FILE NAME                                   */
+             IF         COND(&FILE *EQ '*ALL') THEN(DO)
+/*                                                                   */
+             DSPOBJD    OBJ(&LIB/*ALL) OBJTYPE(*FILE) +
+                          OUTPUT(*OUTFILE) OUTFILE(QTEMP/CCL103W)
+/*                                                                   */
+             OVRDBF     FILE(CCL103W) TOFILE(QTEMP/CCL103W)
+/*                                                                   */
+ READ:       RCVF       RCDFMT(QLIDOBJD)
+             MONMSG     MSGID(CPF0864) EXEC(GOTO CMDLBL(END))
+/*                                                                   */
+             IF         COND((&ODOBAT *EQ 'PF') *OR (&ODOBAT *EQ +
+                          'PF38')) THEN(DO)
+/*                                                                   */
+             DSPFFD     FILE(&ODLBNM/&ODOBNM) OUTPUT(*OUTFILE) +
+                          OUTFILE(QTEMP/CCL101W)
+/*                                                                   */
+             OVRDBF     FILE(CCL101W) TOFILE(QTEMP/CCL101W)
+             CALL       PGM(CCL104) PARM(&ODOBTX)
+/*                                                                   */
+             ENDDO
+/*                                                                   */
+             GOTO       CMDLBL(READ)
+             ENDDO
+/*                                                                   */
+/* Normal end of program                                             */
+ END:        RETURN
+/*                                                                   */
+/* Abnormal end of program                                           */
+
+ ERROR:      RCVMSG     MSGTYPE(*DIAG) MSGDTA(&MSGDTA) MSGID(&MSGID)
+             IF         COND(&MSGID *EQ '       ') THEN(GOTO +
+                          CMDLBL(ERROR_ESC))
+             SNDPGMMSG  MSGID(&MSGID) MSGF(QCPFMSG) MSGDTA(&MSGDTA) +
+                          MSGTYPE(*DIAG)
+             MONMSG     MSGID(CPF0000 MCH0000)
+             GOTO       CMDLBL(ERROR)
+
+/* Re-send escape message and RETURN                                 */
+ ERROR_ESC:  RCVMSG     MSGTYPE(*EXCP) MSGDTA(&MSGDTA) MSGID(&MSGID)
+             SNDPGMMSG  MSGID(&MSGID) MSGF(QCPFMSG) MSGDTA(&MSGDTA) +
+                          MSGTYPE(*ESCAPE)
+             MONMSG     MSGID(CPF0000 MCH0000)
+             RETURN
+
+             ENDPGM
+/*********************************************************************/

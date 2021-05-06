@@ -1,0 +1,61 @@
+     A*%%TS  SD  19981130  161430  MITCHF      REL-V4R2M0  5769-PW1
+     A*****************************************************************
+     A*                                                               *
+     A*  SYSTEM NAME..: CCL UTILITIES                                 *
+     A*                                                               *
+     A*  FILE NAME....: UT010FT                                       *
+     A*                                                               *
+     A*  FILE DESC....: DISPLAY KEY FIELDS                            *
+     A*                                                               *
+     A*  DATE.........: 17/07/98                                      *
+     A*                                                               *
+     A*  AUTHOR.......: FRED MITCHELL                                 *
+     A*                                                               *
+     A*             (C) COPYRIGHT CONCISE CONSULTING LTD.             *
+     A*****************************************************************
+     A*%%EC
+     A                                      DSPSIZ(24 80 *DS3)
+     A                                      PRINT(10)
+     A                                      CF03
+     A                                      CF12
+     A          R F01SFL                    SFL
+     A*%%TS  SD  19981130  161430  MITCHF      REL-V4R2M0  5769-PW1
+     A            FIELD         10A  O  9 13
+     A            SEQN           7A  O  9 25
+     A            SELOMT        35   O  9 35
+     A          R F01CTL                    SFLCTL(F01SFL)
+     A*%%TS  SD  19981130  161430  MITCHF      REL-V4R2M0  5769-PW1
+     A                                      SFLSIZ(0013)
+     A                                      SFLPAG(0012)
+     A                                      OVERLAY
+     A N97                                  SFLDSP
+     A N97                                  SFLDSPCTL
+     A  97                                  SFLCLR
+     A N97                                  SFLEND(*MORE)
+     A                                  1  2'DSPKEY'
+     A                                  1 26'Display Key Fields'
+     A                                      DSPATR(HI)
+     A                                  1 56'User'
+     A            USERID        10A  O  1 61
+     A            UDATE          6Y 0O  1 72EDTCDE(Y)
+     A                                  2 72TIME
+     A                                  3  2'File Name:'
+     A            FILE          21A  O  3 17
+     A                                  4  2'Description:'
+     A            TEXT          50A  O  4 17
+     A  11                              5  2'Based on File:'
+     A  11        BOFILE        21A  O  5 17
+     A                                  7 13'Field'
+     A                                      DSPATR(UL)
+     A                                  7 25'Sequence'
+     A                                      DSPATR(UL)
+     A                                  7 35'Select/Omit'
+     A                                      DSPATR(UL)
+     A          R F01TRL
+     A*%%TS  SD  19980717  140103  QSECOFR     REL-V4R2M0  5769-PW1
+     A                                 22  2'                                  -
+     A                                                                         -
+     A                                               '
+     A                                      DSPATR(UL)
+     A                                 23  2'F3=Exit'
+     A                                 23 11'F12=Previous'

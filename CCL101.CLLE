@@ -1,0 +1,65 @@
+/*********************************************************************/
+/*                                                                   */
+/*  SYSTEM NAME..: CCL400                                            */
+/*                                                                   */
+/*  PROGRAM NAME.: CCL101                                            */
+/*                                                                   */
+/*  PROGRAM DESC.: DISPLAY FIELD DESCRIPTIONS (CPP FOR DSPFLD)       */
+/*                                                                   */
+/*  DATE.........: 17/07/98                                          */
+/*                                                                   */
+/*  AUTHOR.......: FRED MITCHELL                                     */
+/*                                                                   */
+/*               (C) COPYRIGHT CONCISE CONSULTING LTD.               */
+/*********************************************************************/
+             PGM        PARM(&FILEFULL)
+/*                                                                   */
+/* DECLARATIONS                                                      */
+             DCL        &FILEFULL *CHAR LEN(20)
+             DCL        &FILE *CHAR LEN(10)
+             DCL        &LIB *CHAR LEN(10)
+             DCL        &TEXT *CHAR LEN(50)
+             DCL        VAR(&MSGID) TYPE(*CHAR) LEN(7)
+             DCL        VAR(&MSGDTA) TYPE(*CHAR) LEN(256)
+/*                                                                   */
+/* Global message monitor                                            */
+             MONMSG     MSGID(CPF0000 MCH0000) EXEC(GOTO CMDLBL(ERROR))
+/*                                                                   */
+/* EXTRACT FILE/LIBRARY NAMES AND CHECK EXISTENCE                    */
+             CHGVAR     &FILE %SST(&FILEFULL 1 10) /* File name */
+             CHGVAR     &LIB %SST(&FILEFULL 11 10) /* Library name */
+             CHKOBJ     OBJ(&LIB/&FILE) OBJTYPE(*FILE)
+/*                                                                   */
+/* PERFORM DSPFFD TO ACCESS FIELD DESCRIPTIONS                       */
+             DSPFFD     FILE(&LIB/&FILE) OUTPUT(*OUTFILE) +
+                          OUTFILE(QTEMP/CCL101W)
+/*                                                                   */
+/* RETRIEVE OBJECT TEXT                                              */
+             RTVOBJD    OBJ(&LIB/&FILE) OBJTYPE(*FILE) TEXT(&TEXT)
+/*                                                                   */
+/* EXECUTE OVERRIDES AND CALL RPG PROGRAM                            */
+             OVRDBF     FILE(CCL101W) TOFILE(QTEMP/CCL101W)
+             CALL       PGM(CCL102) PARM(&TEXT)
+/*                                                                   */
+/* Normal end of program                                             */
+             RETURN
+/*                                                                   */
+/* Abnormal end of program                                           */
+
+ ERROR:      RCVMSG     MSGTYPE(*DIAG) MSGDTA(&MSGDTA) MSGID(&MSGID)
+             IF         COND(&MSGID *EQ '       ') THEN(GOTO +
+                          CMDLBL(ERROR_ESC))
+             SNDPGMMSG  MSGID(&MSGID) MSGF(QCPFMSG) MSGDTA(&MSGDTA) +
+                          MSGTYPE(*DIAG)
+             MONMSG     MSGID(CPF0000 MCH0000)
+             GOTO       CMDLBL(ERROR)
+
+/* Re-send escape message and RETURN                                 */
+ ERROR_ESC:  RCVMSG     MSGTYPE(*EXCP) MSGDTA(&MSGDTA) MSGID(&MSGID)
+             SNDPGMMSG  MSGID(&MSGID) MSGF(QCPFMSG) MSGDTA(&MSGDTA) +
+                          MSGTYPE(*ESCAPE)
+             MONMSG     MSGID(CPF0000 MCH0000)
+             RETURN
+
+             ENDPGM
+/*********************************************************************/

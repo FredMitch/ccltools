@@ -1,0 +1,77 @@
+     A*%%TS  SD  20130313  095613  MITCHFR     REL-V6R1M0  5761-WDS
+     A*****************************************************************
+     A*                                                               *
+     A*  SYSTEM NAME..: CCL400                                        *
+     A*                                                               *
+     A*  FILE NAME....: CCL102D                                       *
+     A*                                                               *
+     A*  FILE DESC....: DISPLAY FIELD DESCRIPTIONS                    *
+     A*                                                               *
+     A*  DATE.........: 17/07/98                                      *
+     A*                                                               *
+     A*  AUTHOR.......: FRED MITCHELL                                 *
+     A*                                                               *
+     A*             (C) COPYRIGHT CONCISE CONSULTING LTD.             *
+     A*****************************************************************
+     A*%%EC
+     A                                      DSPSIZ(24 80 *DS3)
+     A                                      PRINT(10)
+     A                                      CF03
+     A                                      CF10
+     A                                      CF11
+     A                                      CF12
+     A                                      CF09
+     A          R F01SFL                    SFL
+     A*%%TS  SD  20130313  094401  MITCHFR     REL-V6R1M0  5761-WDS
+     A            WHFLDE        10A  O  9  2
+     A            SIZE           8A  O  9 13
+     A            WHFLDT         1A  O  9 22
+     A            DESC          36A  O  9 25
+     A            WHFOBO         5Y 0O  9 63EDTCDE(4)
+     A            ENDPOS         5Y 0O  9 69EDTCDE(4)
+     A            WHFLDB         5Y 0O  9 75EDTCDE(4)
+     A          R F01CTL                    SFLCTL(F01SFL)
+     A*%%TS  SD  20130313  095613  MITCHFR     REL-V6R1M0  5761-WDS
+     A                                      SFLSIZ(0013)
+     A                                      SFLPAG(0012)
+     A                                      OVERLAY
+     A N97                                  SFLDSP
+     A N97                                  SFLDSPCTL
+     A  97                                  SFLCLR
+     A N97                                  SFLEND(*MORE)
+     A                                  1  2'DSPFLD'
+     A                                  1 21'Display Field Descriptions'
+     A                                      DSPATR(HI)
+     A                                  1 56'User'
+     A            USERID        10A  O  1 61
+     A            UDATE          6Y 0O  1 72EDTCDE(Y)
+     A                                  2 72TIME
+     A                                  3  2'File Name:'
+     A            FILE          21A  O  3 17
+     A                                  4  2'Description:'
+     A            TEXT          50A  O  4 17
+     A                                  5  2'Record Format:'
+     A            WHNAME        10A  O  5 17
+     A                                  7  2'Field Name'
+     A                                      DSPATR(UL)
+     A                                  7 14'Size/Type'
+     A                                      DSPATR(UL)
+     A                                  7 25'Description'
+     A                                      DSPATR(UL)
+     A                                  7 63'Start'
+     A                                      DSPATR(UL)
+     A                                  7 71'End'
+     A                                      DSPATR(UL)
+     A                                  7 77'Len'
+     A                                      DSPATR(UL)
+     A          R F01TRL
+     A*%%TS  SD  19980717  123850  QSECOFR     REL-V4R2M0  5769-PW1
+     A                                 22  2'                                  -
+     A                                                                         -
+     A                                               '
+     A                                      DSPATR(UL)
+     A                                 23  2'F3=Exit'
+     A                                 23 11'F9=Key Fields'
+     A                                 23 26'F10=Print'
+     A                                 23 37'F11=Dependencies'
+     A                                 23 55'F12=Previous'
